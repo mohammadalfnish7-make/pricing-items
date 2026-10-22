@@ -1,0 +1,140 @@
+﻿request_no,line_no,product_name,status,match_score,matched_product,match_examples,its_usd_per_kg,its_rate_example,kg_per_unit,cost_per_unit_usd,assumed_qty,line_cost_usd,formula,brand_example,source_order_id,currency
+N145784,1,АМОРТИЗАТОР БАГАЖНИКА,unmatched,0,,0,,,,,1,,ITS_USD_per_kg * kg_per_unit * qty,,,USD
+N145784,2,БАМПЕРА НАКЛАДКА,matched,1.0,НАКЛАДКА БАМПЕРА MITSUBISHI,2,1.22,"1,22 USD/кг",1.282083,1.5641,1,1.5641,ITS_USD_per_kg * kg_per_unit * qty,MITSUBISHI,Е00001212,USD
+N145784,3,БАМПЕРА УСИЛИТЕЛЬ,unmatched,0,,0,,,,,1,,ITS_USD_per_kg * kg_per_unit * qty,,,USD
+N145784,4,БАЧОК ГИДРОУСИЛИТЕЛЯ,unmatched,0,,0,,,,,1,,ITS_USD_per_kg * kg_per_unit * qty,,,USD
+N145784,5,БЛОК УПРАВЛЕНИЯ КОНДИЦИОНЕРОМ,unmatched,0,,0,,,,,1,,ITS_USD_per_kg * kg_per_unit * qty,,,USD
+N145784,6,БОКС НА ПРИБОРНОЙ ПАНЕЛИ,unmatched,0,,0,,,,,1,,ITS_USD_per_kg * kg_per_unit * qty,,,USD
+N145784,7,ВАЛ КПП,unmatched,0,,0,,,,,1,,ITS_USD_per_kg * kg_per_unit * qty,,,USD
+N145784,8,ВАЛ НАСОСА ГИДРОУСИЛИТЕЛЯ,unmatched,0,,0,,,,,1,,ITS_USD_per_kg * kg_per_unit * qty,,,USD
+N145784,9,ВЕНЕЦ МАХОВИКА,unmatched,0,,0,,,,,1,,ITS_USD_per_kg * kg_per_unit * qty,,,USD
+N145784,10,ВИЛКА ПЕРЕКЛЮЧЕНИЯ ПЕРЕДАЧ,unmatched,0,,0,,,,,1,,ITS_USD_per_kg * kg_per_unit * qty,,,USD
+N145784,11,ВИСКОМУФТА,unmatched,0,,0,,,,,1,,ITS_USD_per_kg * kg_per_unit * qty,,,USD
+N145784,12,ВОЗДУХОВОД,unmatched,0,,0,,,,,1,,ITS_USD_per_kg * kg_per_unit * qty,,,USD
+N145784,13,ВОЗДУХОРАСПРЕДЕЛИТЕЛЬ,unmatched,0,,0,,,,,1,,ITS_USD_per_kg * kg_per_unit * qty,,,USD
+N145784,14,ВТУЛКА РУЛЕВОГО МЕХАНИЗМА,unmatched,0,,0,,,,,1,,ITS_USD_per_kg * kg_per_unit * qty,,,USD
+N145784,15,ГЕНЕРАТОРА ОБМОТКА,unmatched,0,,0,,,,,1,,ITS_USD_per_kg * kg_per_unit * qty,,,USD
+N145784,16,ГОРЛОВИНА БАЧКА ОМЫВАТЕЛЯ,unmatched,0,,0,,,,,1,,ITS_USD_per_kg * kg_per_unit * qty,,,USD
+N145784,17,ГОРЛОВИНА БЕНЗОБАКА (ГАБАРИТ),unmatched,0,,0,,,,,1,,ITS_USD_per_kg * kg_per_unit * qty,,,USD
+N145784,18,ГРУЗ БАЛАНСИРОВОЧНЫЙ,unmatched,0,,0,,,,,1,,ITS_USD_per_kg * kg_per_unit * qty,,,USD
+N145784,19,ДАТЧИК ПОЛОЖЕНИЯ КОЛЕНВАЛА,unmatched,0,,0,,,,,1,,ITS_USD_per_kg * kg_per_unit * qty,,,USD
+N145784,20,ДАТЧИК ТЕМПЕРАТУРЫ,unmatched,0,,0,,,,,1,,ITS_USD_per_kg * kg_per_unit * qty,,,USD
+N145784,21,ДЕРЖАТЕЛЬ АККУМУЛЯТОРНОЙ БАТАРЕИ,unmatched,0,,0,,,,,1,,ITS_USD_per_kg * kg_per_unit * qty,,,USD
+N145784,22,ДИСК СЦЕПЛЕНИЯ,matched,1.0,ДИСК СЦЕПЛЕНИЯ TOYOTA,13,1.22,"1,22 USD/кг",2.5555,3.1177,1,3.1177,ITS_USD_per_kg * kg_per_unit * qty,TOYOTA,Е00001218,USD
+N145784,23,ДИСК ТОРМОЗНОЙ,matched,1.0,ДИСК ТОРМОЗНОЙ VAG,9,1.22,"1,22 USD/кг",6.837778,8.3421,1,8.3421,ITS_USD_per_kg * kg_per_unit * qty,VAG,Е00001232,USD
+N145784,24,ЗАГЛУШКА БЛОКА ЦИЛИНДРОВ,unmatched,0,,0,,,,,1,,ITS_USD_per_kg * kg_per_unit * qty,,,USD
+N145784,25,ЗАГЛУШКА ФАРЫ ПЛАСТИК,unmatched,0,,0,,,,,1,,ITS_USD_per_kg * kg_per_unit * qty,,,USD
+N145784,26,ЗАГОТОВКА КЛЮЧА,matched,1.0,ЗАГОТОВКА КЛЮЧА TOYOTA,4,2.84,"2,84 USD/кг",0.09,0.2556,1,0.2556,ITS_USD_per_kg * kg_per_unit * qty,TOYOTA,Е00001232,USD
+N145784,27,ЗАМОК ЗАЖИГАНИЯ,matched,1.0,ЗАМОК ЗАЖИГАНИЯ MITSUBISHI,2,3.24,"3,24 USD/кг",0.77,2.4948,1,2.4948,ITS_USD_per_kg * kg_per_unit * qty,MITSUBISHI,Е00001220,USD
+N145784,28,ЗАМОК КАПОТА,matched,1.0,ЗАМОК КАПОТА TOYOTA,4,3.24,"3,24 USD/кг",0.1275,0.4131,1,0.4131,ITS_USD_per_kg * kg_per_unit * qty,TOYOTA,Е00001220,USD
+N145784,29,ЗАЩИТА ДВИГАТЕЛЯ НИЖНЯЯ ПЛАСТИК,unmatched,0,,0,,,,,1,,ITS_USD_per_kg * kg_per_unit * qty,,,USD
+N145784,30,ИНТЕРКУЛЕР (ТРАК),unmatched,0,,0,,,,,1,,ITS_USD_per_kg * kg_per_unit * qty,,,USD
+N145784,31,КЛАПАН ВПУСКНОЙ ГРМ,matched,1.0,КЛАПАН ВПУСКНОЙ ГРМ ДЛЯ ДИЗЕЛЬНЫХ ДВС TOYOTA,8,4.86,"4,86 USD/кг",0.149635,0.7272,1,0.7272,ITS_USD_per_kg * kg_per_unit * qty,TOYOTA,Е00001212,USD
+N145784,32,КЛАПАН РЕЦИРКУЛЯЦИИ ВЫХЛОПНЫХ ГАЗОВ,unmatched,0,,0,,,,,1,,ITS_USD_per_kg * kg_per_unit * qty,,,USD
+N145784,33,КОЖУХ РЫЧАГА ПОДВЕСКИ,unmatched,0,,0,,,,,1,,ITS_USD_per_kg * kg_per_unit * qty,,,USD
+N145784,34,КОЛОДКИ БАРАБАННЫЕ,matched,1.0,КОЛОДКИ ТОРМОЗНЫЕ БАРАБАННЫЕ TOYOTA,1,1.79,"1,79 USD/кг",4.1,7.339,1,7.339,ITS_USD_per_kg * kg_per_unit * qty,TOYOTA,Е00001212,USD
+N145784,35,КОЛОДКИ БАРАБАННЫЕ (МОТО),unmatched,0,,0,,,,,1,,ITS_USD_per_kg * kg_per_unit * qty,,,USD
+N145784,36,КОЛОДКИ ДИСКОВЫЕ,matched,1.0,КОЛОДКИ ТОРМОЗНЫЕ ДИСКОВЫЕ TOYOTA,14,1.22,"1,22 USD/кг",0.707898,0.8636,1,0.8636,ITS_USD_per_kg * kg_per_unit * qty,TOYOTA,Е00001231,USD
+N145784,37,КОРПУС ДРОССЕЛЬНОЙ ЗАСЛОНКИ,unmatched,0,,0,,,,,1,,ITS_USD_per_kg * kg_per_unit * qty,,,USD
+N145784,38,КОРПУС ПОМПЫ,unmatched,0,,0,,,,,1,,ITS_USD_per_kg * kg_per_unit * qty,,,USD
+N145784,39,КОРПУС ТЕРМОСТАТА (МОТО),unmatched,0,,0,,,,,1,,ITS_USD_per_kg * kg_per_unit * qty,,,USD
+N145784,40,КПП РЫЧАГА НАСАДКА,unmatched,0,,0,,,,,1,,ITS_USD_per_kg * kg_per_unit * qty,,,USD
+N145784,41,КРЫШКА БЛОКА ПРЕДОХРАНИТЕЛЕЙ,unmatched,0,,0,,,,,1,,ITS_USD_per_kg * kg_per_unit * qty,,,USD
+N145784,42,КРЫШКА БЛОКА ЦИЛИНДРОВ,unmatched,0,,0,,,,,1,,ITS_USD_per_kg * kg_per_unit * qty,,,USD
+N145784,43,КРЫШКА КПП,unmatched,0,,0,,,,,1,,ITS_USD_per_kg * kg_per_unit * qty,,,USD
+N145784,44,КРЫШКА РАЗДАТОЧНОЙ КОРОБКИ,unmatched,0,,0,,,,,1,,ITS_USD_per_kg * kg_per_unit * qty,,,USD
+N145784,45,КУЗОВНОЙ УСИЛИТЕЛЬ,unmatched,0,,0,,,,,1,,ITS_USD_per_kg * kg_per_unit * qty,,,USD
+N145784,46,ЛАМПА САЛОНА,unmatched,0,,0,,,,,1,,ITS_USD_per_kg * kg_per_unit * qty,,,USD
+N145784,47,ЛИЧИНКА ЗАМКА С КЛЮЧАМИ,unmatched,0,,0,,,,,1,,ITS_USD_per_kg * kg_per_unit * qty,,,USD
+N145784,48,ЛЮЧОК ТОПЛИВНОГО БАКА,unmatched,0,,0,,,,,1,,ITS_USD_per_kg * kg_per_unit * qty,,,USD
+N145784,49,МАСЛОЗАЛИВНАЯ ГОРЛОВИНА,unmatched,0,,0,,,,,1,,ITS_USD_per_kg * kg_per_unit * qty,,,USD
+N145784,50,МАСЛООХЛАДИТЕЛЬ,unmatched,0,,0,,,,,1,,ITS_USD_per_kg * kg_per_unit * qty,,,USD
+N145784,51,МАСЛОПРИЕМНИК,unmatched,0,,0,,,,,1,,ITS_USD_per_kg * kg_per_unit * qty,,,USD
+N145784,52,МОТОР ДРОССЕЛЬНОЙ ЗАСЛОНКИ,unmatched,0,,0,,,,,1,,ITS_USD_per_kg * kg_per_unit * qty,,,USD
+N145784,53,НАБОР ПРОКЛАДОК КАРБЮРАТОРА,unmatched,0,,0,,,,,1,,ITS_USD_per_kg * kg_per_unit * qty,,,USD
+N145784,54,НАКЛАДКА КРЫЛА,unmatched,0,,0,,,,,1,,ITS_USD_per_kg * kg_per_unit * qty,,,USD
+N145784,55,НАКЛАДКА ПЕДАЛИ РЕЗИНА,unmatched,0,,0,,,,,1,,ITS_USD_per_kg * kg_per_unit * qty,,,USD
+N145784,56,НАПРАВЛЯЮЩАЯ СУППОРТА,matched,1.0,НАПРАВЛЯЮЩАЯ СУППОРТА TOYOTA,1,1.22,"1,22 USD/кг",0.425,0.5185,1,0.5185,ITS_USD_per_kg * kg_per_unit * qty,TOYOTA,Е00001210,USD
+N145784,57,НАСАДКА НА ГЛУШИТЕЛЬ,unmatched,0,,0,,,,,1,,ITS_USD_per_kg * kg_per_unit * qty,,,USD
+N145784,58,НАСОС МАСЛЯНЫЙ,matched,1.0,НАСОС МАСЛЯНЫЙ ДЛЯ ДВС TOYOTA,12,5.67,"5,67 USD/кг",1.776786,10.0744,1,10.0744,ITS_USD_per_kg * kg_per_unit * qty,TOYOTA,Е00001220,USD
+N145784,59,НАТЯЖИТЕЛЬ РЕМНЯ,matched,1.0,НАТЯЖИТЕЛЬ РЕМНЯ стальной штампованный TOYOTA,9,4.05,"4,05 USD/кг",0.264835,1.0726,1,1.0726,ITS_USD_per_kg * kg_per_unit * qty,TOYOTA,Е00001212,USD
+N145784,60,НИППЕЛЬ ШИНЫ,unmatched,0,,0,,,,,1,,ITS_USD_per_kg * kg_per_unit * qty,,,USD
+N145784,61,ОГРАНИЧИТЕЛЬ ДВЕРИ,matched,1.0,"ОГРАНИЧИТЕЛЬ ДВЕРИ, МЕТАЛ TOYOTA",4,1.62,"1,62 USD/кг",0.064409,0.1043,1,0.1043,ITS_USD_per_kg * kg_per_unit * qty,TOYOTA,Е00001218,USD
+N145784,62,ОКАНТОВКА ФАРЫ,unmatched,0,,0,,,,,1,,ITS_USD_per_kg * kg_per_unit * qty,,,USD
+N145784,63,ОПОРА КУЗОВНАЯ,unmatched,0,,0,,,,,1,,ITS_USD_per_kg * kg_per_unit * qty,,,USD
+N145784,64,ПАНЕЛЬ УПРАВЛЕНИЯ ОТОПИТЕЛЕМ,unmatched,0,,0,,,,,1,,ITS_USD_per_kg * kg_per_unit * qty,,,USD
+N145784,65,ПАНЕЛЬ ЩИТКА ПРИБОРОВ,unmatched,0,,0,,,,,1,,ITS_USD_per_kg * kg_per_unit * qty,,,USD
+N145784,66,ПАТРОН ЛАМПЫ,matched,1.0,ПАТРОН ЛАМПЫ НАКАЛИВАНИЯ TOYOTA,5,0.71,"0,71 USD/кг",0.086667,0.0615,1,0.0615,ITS_USD_per_kg * kg_per_unit * qty,TOYOTA,Е00001210,USD
+N145784,67,ПЕРЕХОДНИК,unmatched,0,,0,,,,,1,,ITS_USD_per_kg * kg_per_unit * qty,,,USD
+N145784,68,ПЕТЛЯ КАПОТА,matched,1.0,Петля капота TOYOTA,2,2.15,"2,15 USD/кг",0.162423,0.3492,1,0.3492,ITS_USD_per_kg * kg_per_unit * qty,TOYOTA,Е00001212,USD
+N145784,69,ПИСТОН ПЛАСТИК,unmatched,0,,0,,,,,1,,ITS_USD_per_kg * kg_per_unit * qty,,,USD
+N145784,70,ПЛАНКА РАСПОРНАЯ БАРАБАННОГО ТОРМОЗА,unmatched,0,,0,,,,,1,,ITS_USD_per_kg * kg_per_unit * qty,,,USD
+N145784,71,ПЛАСТИНА КПП,unmatched,0,,0,,,,,1,,ITS_USD_per_kg * kg_per_unit * qty,,,USD
+N145784,72,ПЛАСТИНЫ НАПРАВЛЯЮЩИЕ ТОРМ КОЛОДОК,unmatched,0,,0,,,,,1,,ITS_USD_per_kg * kg_per_unit * qty,,,USD
+N145784,73,ПЛУНЖЕР,unmatched,0,,0,,,,,1,,ITS_USD_per_kg * kg_per_unit * qty,,,USD
+N145784,74,ПОВОДОК СТЕКЛООЧИСТИТЕЛЯ,matched,1.0,ПОВОДОК СТЕКЛООЧИСТИТЕЛЯ TOYOTA,2,8.1,"8,10 USD/кг",0.802143,6.4974,1,6.4974,ITS_USD_per_kg * kg_per_unit * qty,TOYOTA,Е00001232,USD
+N145784,75,ПОВТОРИТЕЛЬ ПОВОРОТА,matched,1.0,ПОВТОРИТЕЛЬ ПОВОРОТА TOYOTA,5,4.86,"4,86 USD/кг",0.225455,1.0957,1,1.0957,ITS_USD_per_kg * kg_per_unit * qty,TOYOTA,Е00001212,USD
+N145784,76,ПОДПЯТНИК,unmatched,0,,0,,,,,1,,ITS_USD_per_kg * kg_per_unit * qty,,,USD
+N145784,77,ПОДРАМНИК,unmatched,0,,0,,,,,1,,ITS_USD_per_kg * kg_per_unit * qty,,,USD
+N145784,78,ПОДРУЛЕВОЕ КОЛЬЦО,unmatched,0,,0,,,,,1,,ITS_USD_per_kg * kg_per_unit * qty,,,USD
+N145784,79,ПОДСТАКАННИК,unmatched,0,,0,,,,,1,,ITS_USD_per_kg * kg_per_unit * qty,,,USD
+N145784,80,ПОДУШКА БЕЗОПАСНОСТИ,unmatched,0,,0,,,,,1,,ITS_USD_per_kg * kg_per_unit * qty,,,USD
+N145784,81,ПОДУШКА РАДИАТОРА,unmatched,0,,0,,,,,1,,ITS_USD_per_kg * kg_per_unit * qty,,,USD
+N145784,82,ПОДШИПНИК,unmatched,0,,0,,,,,1,,ITS_USD_per_kg * kg_per_unit * qty,,,USD
+N145784,83,ПОДШИПНИК КОНИЧЕСКИЙ,unmatched,0,,0,,,,,1,,ITS_USD_per_kg * kg_per_unit * qty,,,USD
+N145784,84,ПОЛУОСЬ,matched,1.0,ПОЛУОСЬ TOYOTA,3,1.22,"1,22 USD/кг",2.136667,2.6067,1,2.6067,ITS_USD_per_kg * kg_per_unit * qty,TOYOTA,Е00001220,USD
+N145784,85,ПОПЕРЕЧНАЯ БАЛКА КРЫШИ,unmatched,0,,0,,,,,1,,ITS_USD_per_kg * kg_per_unit * qty,,,USD
+N145784,86,ПОРШЕНЬ ГЛАВНОГО ЦИЛИНДРА СЦЕПЛЕНИЯ,unmatched,0,,0,,,,,1,,ITS_USD_per_kg * kg_per_unit * qty,,,USD
+N145784,87,ПРИВОД ЗАСЛОНКИ ОТОПИТЕЛЯ САЛОНА,unmatched,0,,0,,,,,1,,ITS_USD_per_kg * kg_per_unit * qty,,,USD
+N145784,88,ПРОКЛАДКА ТОПЛИВНОЙ ФОРСУНКИ РЕЗИНА,unmatched,0,,0,,,,,1,,ITS_USD_per_kg * kg_per_unit * qty,,,USD
+N145784,89,ПРУЖИНА ПОДВЕСКИ,matched,1.0,"ПРУЖИНА ПОДВЕСКИ винтовая из черных металлов, работающая на сжатие TOYOTA",12,2.43,"2,43 USD/кг",2.735417,6.6471,1,6.6471,ITS_USD_per_kg * kg_per_unit * qty,TOYOTA,Е00001231,USD
+N145784,90,ПЫЛЬНИК СЕЛЕКТОРА АКПП,unmatched,0,,0,,,,,1,,ITS_USD_per_kg * kg_per_unit * qty,,,USD
+N145784,91,РЕЗОНАТОР ВОЗДУШНОГО ФИЛЬТРА,unmatched,0,,0,,,,,1,,ITS_USD_per_kg * kg_per_unit * qty,,,USD
+N145784,92,РЕЙЛИНГ КРЫШИ (ГАБАРИТ),unmatched,0,,0,,,,,1,,ITS_USD_per_kg * kg_per_unit * qty,,,USD
+N145784,93,РЕЛЕ,unmatched,0,,0,,,,,1,,ITS_USD_per_kg * kg_per_unit * qty,,,USD
+N145784,94,РЕЛЕ УПРАВЛЕНИЯ СВЕЧАМИ НАКАЛИВАНИЯ,unmatched,0,,0,,,,,1,,ITS_USD_per_kg * kg_per_unit * qty,,,USD
+N145784,95,РЕШЕТКА БАМПЕРА,unmatched,0,,0,,,,,1,,ITS_USD_per_kg * kg_per_unit * qty,,,USD
+N145784,96,РЕШЕТКА ВЕНТИЛЯЦИИ САЛОНА,unmatched,0,,0,,,,,1,,ITS_USD_per_kg * kg_per_unit * qty,,,USD
+N145784,97,РОЛИК ГРМ,matched,1.0,РОЛИК ГРМ NISSAN,4,4.05,"4,05 USD/кг",0.149658,0.6061,1,0.6061,ITS_USD_per_kg * kg_per_unit * qty,NISSAN,Е00001226,USD
+N145784,98,РОТОР ДАТЧИКА СКОРОСТИ,unmatched,0,,0,,,,,1,,ITS_USD_per_kg * kg_per_unit * qty,,,USD
+N145784,99,РУЧКА ГАЗА (МОТО),unmatched,0,,0,,,,,1,,ITS_USD_per_kg * kg_per_unit * qty,,,USD
+N145784,100,РУЧКА САЛОНА ПОТОЛОЧНАЯ,unmatched,0,,0,,,,,1,,ITS_USD_per_kg * kg_per_unit * qty,,,USD
+N145784,101,РЫЧАГ КПП,unmatched,0,,0,,,,,1,,ITS_USD_per_kg * kg_per_unit * qty,,,USD
+N145784,102,РЫЧАГ ПЕРЕКЛЮЧЕНИЯ ПЕРЕДАЧ (МОТО),matched,0.75,РЫЧАГ ПЕРЕКЛЮЧЕНИЯ ПЕРЕДАЧ TOYOTA,1,1.22,"1,22 USD/кг",0.17,0.2074,1,0.2074,ITS_USD_per_kg * kg_per_unit * qty,TOYOTA,Е00001232,USD
+N145784,103,САПУН,unmatched,0,,0,,,,,1,,ITS_USD_per_kg * kg_per_unit * qty,,,USD
+N145784,104,СЕРВОПРИВОД,unmatched,0,,0,,,,,1,,ITS_USD_per_kg * kg_per_unit * qty,,,USD
+N145784,105,СПИДОМЕТР,unmatched,0,,0,,,,,1,,ITS_USD_per_kg * kg_per_unit * qty,,,USD
+N145784,106,СПОЙЛЕР,unmatched,0,,0,,,,,1,,ITS_USD_per_kg * kg_per_unit * qty,,,USD
+N145784,107,СТЕКЛО ФОНАРЯ,unmatched,0,,0,,,,,1,,ITS_USD_per_kg * kg_per_unit * qty,,,USD
+N145784,108,СТОЙКА СТАБИЛИЗАТОРА,matched,1.0,СТОЙКА СТАБИЛИЗАТОРА TOYOTA,13,1.22,"1,22 USD/кг",0.5975,0.7289,1,0.7289,ITS_USD_per_kg * kg_per_unit * qty,TOYOTA,Е00001216,USD
+N145784,109,СТРЕМЯНКА РЕССОРЫ,unmatched,0,,0,,,,,1,,ITS_USD_per_kg * kg_per_unit * qty,,,USD
+N145784,110,СТУПИЦА КОЛЕСА,matched,1.0,СТУПИЦА КОЛЕСА ЗВЕЗДООБРАЗНОЙ ФОРМЫ ЦЕЛЬНОЛИТАЯ ИЗ ЧЕРНЫХ МЕТАЛЛОВ TOYOTA,14,1.1,"1,10 USD/кг",3.119762,3.4317,1,3.4317,ITS_USD_per_kg * kg_per_unit * qty,TOYOTA,Е00001216,USD
+N145784,111,ТОРПЕДО НАКЛАДКА,unmatched,0,,0,,,,,1,,ITS_USD_per_kg * kg_per_unit * qty,,,USD
+N145784,112,ТРАНСМИТТЕР,unmatched,0,,0,,,,,1,,ITS_USD_per_kg * kg_per_unit * qty,,,USD
+N145784,113,ТРАПЕЦИЯ СТЕКЛООЧИСТИТЕЛЯ,unmatched,0,,0,,,,,1,,ITS_USD_per_kg * kg_per_unit * qty,,,USD
+N145784,114,ТРОЙНИК,unmatched,0,,0,,,,,1,,ITS_USD_per_kg * kg_per_unit * qty,,,USD
+N145784,115,ТРОС СЦЕПЛЕНИЯ,matched,1.0,ТРОС СЦЕПЛЕНИЯ TOYOTA,1,1.22,"1,22 USD/кг",0.171,0.2086,1,0.2086,ITS_USD_per_kg * kg_per_unit * qty,TOYOTA,Е00001232,USD
+N145784,116,ТРОС УПРАВЛЕНИЯ ОТОПИТЕЛЕМ,unmatched,0,,0,,,,,1,,ITS_USD_per_kg * kg_per_unit * qty,,,USD
+N145784,117,ТРУБКА ГИДРОУСИЛИТЕЛЯ РУЛЯ,unmatched,0,,0,,,,,1,,ITS_USD_per_kg * kg_per_unit * qty,,,USD
+N145784,118,ТРУБКА МАСЛЯНАЯ,unmatched,0,,0,,,,,1,,ITS_USD_per_kg * kg_per_unit * qty,,,USD
+N145784,119,ТРУБКА ПЛАСТИК,unmatched,0,,0,,,,,1,,ITS_USD_per_kg * kg_per_unit * qty,,,USD
+N145784,120,УПЛОТНИТЕЛЬ КУЗОВНОЙ (ГИБКИЙ),unmatched,0,,0,,,,,1,,ITS_USD_per_kg * kg_per_unit * qty,,,USD
+N145784,121,УПЛОТНИТЕЛЬ ФАРЫ,unmatched,0,,0,,,,,1,,ITS_USD_per_kg * kg_per_unit * qty,,,USD
+N145784,122,УПОР КАПОТА,unmatched,0,,0,,,,,1,,ITS_USD_per_kg * kg_per_unit * qty,,,USD
+N145784,123,ФИЛЬТР ВОДЯНОЙ,unmatched,0,,0,,,,,1,,ITS_USD_per_kg * kg_per_unit * qty,,,USD
+N145784,124,ФИЛЬТР ВОЗДУШНЫЙ В СБОРЕ,unmatched,0,,0,,,,,1,,ITS_USD_per_kg * kg_per_unit * qty,,,USD
+N145784,125,ФИЛЬТР МАСЛЯНЫЙ,matched,1.0,ФИЛЬТР МАСЛЯНЫЙ для двигателей внутреннего сгорания VOLVO,16,4.05,"4,05 USD/кг",0.25641,1.0385,1,1.0385,ITS_USD_per_kg * kg_per_unit * qty,VOLVO,Е00001220,USD
+N145784,126,ФИЛЬТР ТОПЛИВНЫЙ,matched,1.0,ФИЛЬТР ТОПЛИВНЫЙ для двигателей внутреннего сгорания TOYOTA,11,4.05,"4,05 USD/кг",0.256346,1.0382,1,1.0382,ITS_USD_per_kg * kg_per_unit * qty,TOYOTA,Е00001232,USD
+N145784,127,ФИЛЬТР ТОПЛИВНЫЙ КАРТРИДЖ,unmatched,0,,0,,,,,1,,ITS_USD_per_kg * kg_per_unit * qty,,,USD
+N145784,128,ФЛАНЕЦ,matched,1.0,ФЛАНЕЦ СТУПИЦЫ TOYOTA,4,13.77,"13,77 USD/кг",0.5975,8.2276,1,8.2276,ITS_USD_per_kg * kg_per_unit * qty,TOYOTA,Е00001220,USD
+N145784,129,ФОРСУНКА ТОПЛИВНАЯ,matched,1.0,ФОРСУНКА ТОПЛИВНАЯ ДЛЯ ДИЗЕЛЬНЫХ ДВС TOYOTA,10,4.86,"4,86 USD/кг",0.025558,0.1242,1,0.1242,ITS_USD_per_kg * kg_per_unit * qty,TOYOTA,Е00001232,USD
+N145784,130,ЦИЛИНДР СЦЕПЛЕНИЯ РАБОЧИЙ,unmatched,0,,0,,,,,1,,ITS_USD_per_kg * kg_per_unit * qty,,,USD
+N145784,131,ШАРИК МЕТАЛ,unmatched,0,,0,,,,,1,,ITS_USD_per_kg * kg_per_unit * qty,,,USD
+N145784,132,ШЛАНГ СЦЕПЛЕНИЯ РЕЗИНА,unmatched,0,,0,,,,,1,,ITS_USD_per_kg * kg_per_unit * qty,,,USD
+N145784,133,ШЛАНГ ТОРМОЗНОЙ РЕЗИНА,unmatched,0,,0,,,,,1,,ITS_USD_per_kg * kg_per_unit * qty,,,USD
+N145784,134,ШРУС,unmatched,0,,0,,,,,1,,ITS_USD_per_kg * kg_per_unit * qty,,,USD
+N145784,135,ЩЕТКОДЕРЖАТЕЛЬ ГЕНЕРАТОРА,unmatched,0,,0,,,,,1,,ITS_USD_per_kg * kg_per_unit * qty,,,USD
+N145784,136,ЩЕТКОДЕРЖАТЕЛЬ СТАРТЕРА,unmatched,0,,0,,,,,1,,ITS_USD_per_kg * kg_per_unit * qty,,,USD
+N145784,137,ЩИТОК ПОДКРЫЛКА,unmatched,0,,0,,,,,1,,ITS_USD_per_kg * kg_per_unit * qty,,,USD
+N145784,138,ЩУП УРОВНЯ МАСЛА,unmatched,0,,0,,,,,1,,ITS_USD_per_kg * kg_per_unit * qty,,,USD
+N145784,139,ЭЛЕКТРОКЛАПАН АКПП,unmatched,0,,0,,,,,1,,ITS_USD_per_kg * kg_per_unit * qty,,,USD
