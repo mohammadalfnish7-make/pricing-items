@@ -23,8 +23,17 @@ MAX_BYTES = 25 * 1024 * 1024
 
 
 @app.get("/api/health")
-def health() -> dict[str, str]:
-    return {"status": "ok"}
+def health() -> dict:
+    from pathlib import Path
+
+    catalog = Path(
+        __import__("os").environ.get("CATALOG_PATH", "/data/all_orders_merged.csv")
+    )
+    return {
+        "status": "ok",
+        "catalog": catalog.name if catalog.is_file() else None,
+        "catalog_ok": catalog.is_file(),
+    }
 
 
 @app.post("/api/price")
