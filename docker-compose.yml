@@ -22,15 +22,13 @@ services:
       timeout: 5s
       retries: 5
       start_period: 20s
-    networks:
-      - app
 
   frontend:
     build:
       context: ./frontend
       args:
         VITE_API_BASE: ""
-    # Public HTTP port for Coolify reverse proxy (set Coolify "Ports Exposes" to 80).
+    # Public HTTP port for Coolify reverse proxy (domain → service frontend, port 80).
     expose:
       - "80"
     depends_on:
@@ -43,9 +41,3 @@ services:
       timeout: 5s
       retries: 5
       start_period: 10s
-    networks:
-      - app
-
-networks:
-  app:
-    driver: bridge
