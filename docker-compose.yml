@@ -1,21 +1,32 @@
 services:
   backend:
     build: ./backend
-    ports:
-      - "8000:8000"
+    # Internal only — Coolify / frontend reach it as http://backend:8000
+    # Do not publish host:8000 (conflicts with other apps / Coolify).
+    expose:
+      - "8000"
     environment:
       CATALOG_PATH: /data/all_orders_merged.csv
     volumes:
       - ./data:/data:ro
     restart: unless-stopped
+    networks:
+      - app
 
   frontend:
     build:
       context: ./frontend
       args:
         VITE_API_BASE: ""
-    ports:
-      - "3000:80"
+    # Public HTTP port for Coolify reverse proxy (set Coolify "Ports Exposes" to 80).
+    expose:
+      - "80"
     depends_on:
       - backend
     restart: unless-stopped
+    networks:
+      - app
+
+networks:
+  app:
+    driver: bridge

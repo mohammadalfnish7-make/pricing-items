@@ -15,13 +15,18 @@ Demo app: upload a CSV/XLSX list of order items and see **cost per line**.
 
 ## Quick start (Docker)
 
+**Local (with host ports 3000 / 8000):**
+
 ```bash
-docker compose up --build
+docker compose -f docker-compose.yml -f docker-compose.local.yml up --build
 ```
 
 - UI: http://localhost:3000  
 - API docs: http://localhost:8000/docs  
-- Health: http://localhost:8000/api/health  
+
+**Coolify / production:** use `docker-compose.yml` only (no host port binds).  
+Point the Coolify domain at the **frontend** service, **port 80**.  
+Backend stays internal as `http://backend:8000` (nginx proxies `/api`).
 
 Upload `data/all_orders_merged.csv` from the UI to try it.
 
