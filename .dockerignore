@@ -1,0 +1,13 @@
+.git
+.cursor
+frontend
+**/__pycache__
+**/*.pyc
+**/.venv
+**/venv
+**/.pytest_cache
+data/*
+!data/all_orders_merged.csv
+*.md
+.env
+.DS_Store

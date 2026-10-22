@@ -4,11 +4,13 @@ WORKDIR /app
 
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
+ENV CATALOG_PATH=/data/all_orders_merged.csv
 
-COPY requirements.txt .
+COPY backend/requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-COPY app ./app
+COPY backend/app ./app
+COPY data/all_orders_merged.csv /data/all_orders_merged.csv
 
 EXPOSE 8000
 
