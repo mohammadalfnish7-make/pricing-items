@@ -25,6 +25,14 @@ async function api(path, options = {}) {
   return data;
 }
 
+function BrandMark() {
+  return (
+    <a className="brand-mark" href="https://karam-alarab.com" target="_blank" rel="noreferrer">
+      <img src="/karam-logo.svg" alt="KARAM AL ARAB" />
+    </a>
+  );
+}
+
 function LoginScreen({ onLoggedIn }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -52,31 +60,29 @@ function LoginScreen({ onLoggedIn }) {
   return (
     <div className="app login-app">
       <section className="panel login-panel">
-        <h1 className="brand">Pricing Items</h1>
-        <p className="lede">Sign in with the email and password set in Coolify.</p>
+        <BrandMark />
+        <h1 className="brand">Pricing</h1>
         <form className="login-form" onSubmit={onSubmit}>
-          <label>
-            Email
-            <input
-              type="email"
-              name="email"
-              autoComplete="username"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-            />
-          </label>
-          <label>
-            Password
-            <input
-              type="password"
-              name="password"
-              autoComplete="current-password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
-          </label>
+          <input
+            type="email"
+            name="email"
+            autoComplete="username"
+            placeholder=" "
+            aria-label="Username"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
+          <input
+            type="password"
+            name="password"
+            autoComplete="current-password"
+            placeholder=" "
+            aria-label="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
           <button type="submit" className="btn btn-primary" disabled={loading}>
             {loading ? "Signing in…" : "Sign in"}
           </button>
@@ -241,7 +247,9 @@ function CatalogSearch({ onSessionLost }) {
               <tr>
                 <th>Product</th>
                 <th>$/kg</th>
-                <th>Score</th>
+                <th title="How closely the name matches a catalog product. Higher is better.">
+                  Match
+                </th>
                 <th>Country</th>
                 <th>Order</th>
                 <th>CSV row</th>
@@ -327,6 +335,8 @@ function ResultsPanel({ page, pageKey, openRef, setOpenRef }) {
         )}
         {" · "}
         <code>$/kg = Итого ÷ gross kg</code>
+        {" · "}
+        Match = name closeness (1.00 is strong)
       </p>
 
       <div
@@ -349,7 +359,9 @@ function ResultsPanel({ page, pageKey, openRef, setOpenRef }) {
               <th>#</th>
               <th>Product</th>
               <th>$/kg</th>
-              <th>Score</th>
+              <th title="How closely the uploaded name matches a catalog product. Higher is better.">
+                Match
+              </th>
               <th>Country</th>
               <th>Source order</th>
               <th>CSV row</th>
@@ -536,7 +548,10 @@ export default function App() {
     <div className="app">
       <header className="hero">
         <div className="hero-top">
-          <h1 className="brand">Pricing Items</h1>
+          <div>
+            <BrandMark />
+            <h1 className="brand">Pricing</h1>
+          </div>
           <button type="button" className="btn btn-ghost" onClick={logout}>
             Sign out
           </button>

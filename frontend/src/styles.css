@@ -1,18 +1,19 @@
 :root {
-  --bg: #0f1410;
-  --bg-elevated: #1a221c;
-  --bg-soft: #243028;
-  --ink: #eef3ea;
-  --muted: #9aab9c;
-  --line: rgba(238, 243, 234, 0.12);
-  --accent: #c4f04d;
-  --accent-ink: #15200c;
-  --warn: #f0b35a;
-  --danger: #f07167;
-  --ok: #7ddea0;
-  --shadow: 0 24px 60px rgba(0, 0, 0, 0.35);
-  --radius: 18px;
-  --font: "DM Sans", system-ui, sans-serif;
+  --bg: #f3f6fb;
+  --bg-elevated: #ffffff;
+  --bg-soft: #eef3fb;
+  --ink: #212529;
+  --muted: #6c757d;
+  --line: rgba(20, 50, 198, 0.12);
+  --accent: #1769ff;
+  --accent-deep: #1432c6;
+  --accent-ink: #ffffff;
+  --warn: #c47d12;
+  --danger: #dc3545;
+  --ok: #198754;
+  --shadow: 0 18px 40px rgba(20, 50, 198, 0.08);
+  --radius: 16px;
+  --font: "Montserrat", system-ui, sans-serif;
   --mono: "IBM Plex Mono", ui-monospace, monospace;
 }
 
@@ -31,9 +32,8 @@ body {
   font-family: var(--font);
   color: var(--ink);
   background:
-    radial-gradient(1200px 600px at 10% -10%, rgba(196, 240, 77, 0.12), transparent 55%),
-    radial-gradient(900px 500px at 100% 0%, rgba(125, 222, 160, 0.08), transparent 50%),
-    linear-gradient(180deg, #121812 0%, var(--bg) 40%, #0c100d 100%);
+    radial-gradient(900px 420px at 80% -10%, rgba(23, 105, 255, 0.12), transparent 55%),
+    linear-gradient(180deg, #f7f9fd 0%, var(--bg) 45%, #eef3fb 100%);
 }
 
 button,
@@ -71,23 +71,35 @@ input {
   padding: 2rem 1.5rem;
 }
 
+.brand-mark {
+  display: inline-flex;
+  align-items: center;
+}
+
+.brand-mark img {
+  height: 36px;
+  width: auto;
+  display: block;
+}
+
+.login-panel .brand-mark {
+  margin-bottom: 1.1rem;
+}
+
+.login-panel .brand-mark img {
+  height: 42px;
+}
+
 .login-panel .brand {
-  font-size: 2.2rem;
-  margin-bottom: 0.5rem;
+  font-size: 2rem;
+  color: var(--accent);
+  margin-bottom: 0.25rem;
 }
 
 .login-form {
   display: grid;
   gap: 0.9rem;
   margin-top: 1.5rem;
-}
-
-.login-form label {
-  display: grid;
-  gap: 0.35rem;
-  color: var(--muted);
-  font-size: 0.9rem;
-  font-weight: 600;
 }
 
 .login-form input {
@@ -113,11 +125,12 @@ input {
 }
 
 .brand {
-  font-size: clamp(2.4rem, 5vw, 3.6rem);
-  font-weight: 700;
-  letter-spacing: -0.04em;
-  line-height: 0.95;
-  margin: 0;
+  font-size: clamp(2rem, 4vw, 2.8rem);
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  line-height: 1;
+  margin: 0.55rem 0 0;
+  color: var(--accent);
 }
 
 .lede {
@@ -194,7 +207,7 @@ input {
   border: 1.5px dashed color-mix(in srgb, var(--accent) 45%, var(--line));
   border-radius: calc(var(--radius) - 4px);
   background:
-    linear-gradient(180deg, rgba(196, 240, 77, 0.06), transparent 70%),
+    linear-gradient(180deg, rgba(23, 105, 255, 0.06), transparent 70%),
     var(--bg-soft);
   padding: 2.5rem 1.5rem;
   text-align: center;
@@ -205,7 +218,7 @@ input {
   border-color: var(--accent);
   transform: translateY(-2px);
   background:
-    linear-gradient(180deg, rgba(196, 240, 77, 0.12), transparent 70%),
+    linear-gradient(180deg, rgba(23, 105, 255, 0.1), transparent 70%),
     var(--bg-soft);
 }
 
@@ -255,7 +268,11 @@ input {
 .btn-primary {
   background: var(--accent);
   color: var(--accent-ink);
-  font-weight: 700;
+  font-weight: 600;
+}
+
+.btn-primary:not(:disabled):hover {
+  background: var(--accent-deep);
 }
 
 .btn-ghost {
@@ -326,7 +343,7 @@ td {
 th {
   position: sticky;
   top: 0;
-  background: #1f2a22;
+  background: #f4f7fc;
   color: var(--muted);
   font-size: 0.78rem;
   text-transform: uppercase;
@@ -359,8 +376,8 @@ td.num {
   display: inline-block;
   padding: 0.15rem 0.5rem;
   border-radius: 999px;
-  background: rgba(196, 240, 77, 0.12);
-  color: var(--accent);
+  background: rgba(23, 105, 255, 0.1);
+  color: var(--accent-deep);
   font-size: 0.75rem;
   font-family: var(--mono);
 }
@@ -437,7 +454,7 @@ td.num {
 }
 
 .ref-detail td {
-  background: #152019;
+  background: #f4f7fc;
 }
 
 .ref-list {
