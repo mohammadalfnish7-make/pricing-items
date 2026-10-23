@@ -258,21 +258,21 @@ function CatalogSearch({ onSessionLost }) {
             <tbody>
               {items.map((item) => (
                 <tr key={`${item.catalog_file}-${item.catalog_row}`}>
-                  <td className="product">
+                  <td className="product" data-label="Product">
                     <strong>{item.product_name}</strong>
                     <span>
                       {item.brand || item.manufacturer || "catalog"}
                       {item.source_ref ? ` · ${item.catalog_file}` : ""}
                     </span>
                   </td>
-                  <td className="num">{item.usd_per_kg ?? "—"}</td>
-                  <td className="num">{item.match_score ?? "—"}</td>
-                  <td>{item.country || "—"}</td>
-                  <td className="num">
+                  <td className="num" data-label="$/kg">{item.usd_per_kg ?? "—"}</td>
+                  <td className="num" data-label="Match">{item.match_score ?? "—"}</td>
+                  <td data-label="Country">{item.country || "—"}</td>
+                  <td className="num" data-label="Order">
                     {item.order_id || "—"}
                     {item.order_line ? ` / L${item.order_line}` : ""}
                   </td>
-                  <td className="num">{item.catalog_row ?? "—"}</td>
+                  <td className="num" data-label="CSV row">{item.catalog_row ?? "—"}</td>
                 </tr>
               ))}
             </tbody>
@@ -319,7 +319,7 @@ function ResultsPanel({ page, pageKey, openRef, setOpenRef }) {
         </p>
       ) : null}
 
-      <p className="status" style={{ textAlign: "left", marginBottom: "1rem" }}>
+      <p className="status note-line">
         {pageKey === "fuzzy" ? (
           <>
             <strong>Page 2 — Fuzzy match</strong>
@@ -339,10 +339,7 @@ function ResultsPanel({ page, pageKey, openRef, setOpenRef }) {
         Match = name closeness (1.00 is strong)
       </p>
 
-      <div
-        className="actions"
-        style={{ justifyContent: "flex-start", margin: "0 0 1rem" }}
-      >
+      <div className="actions result-actions">
         <button
           type="button"
           className="btn btn-ghost"
@@ -372,8 +369,10 @@ function ResultsPanel({ page, pageKey, openRef, setOpenRef }) {
             {items.map((item, idx) => (
               <Fragment key={`${pageKey}-${item.line_no}-${idx}`}>
                 <tr className={item.country_diff ? "row-warn" : undefined}>
-                  <td className="num">{item.line_no || "—"}</td>
-                  <td className="product">
+                  <td className="num" data-label="#">
+                    {item.line_no || "—"}
+                  </td>
+                  <td className="product" data-label="Product">
                     <strong>{item.product_name || "—"}</strong>
                     <span>
                       {item.matched_product
@@ -383,11 +382,13 @@ function ResultsPanel({ page, pageKey, openRef, setOpenRef }) {
                           : "—"}
                     </span>
                   </td>
-                  <td className="num">
+                  <td className="num" data-label="$/kg">
                     {item.price_per_kg != null ? item.price_per_kg : "—"}
                   </td>
-                  <td className="num">{item.match_score ?? "—"}</td>
-                  <td>
+                  <td className="num" data-label="Match">
+                    {item.match_score ?? "—"}
+                  </td>
+                  <td data-label="Country">
                     {item.country_diff ? (
                       <span
                         className="chip chip-warn"
@@ -400,14 +401,16 @@ function ResultsPanel({ page, pageKey, openRef, setOpenRef }) {
                       item.country_of_origin || item.source_country || "—"
                     )}
                   </td>
-                  <td className="num">
+                  <td className="num" data-label="Source order">
                     {item.source_order_id || item.order_id || "—"}
                     {item.source_order_line
                       ? ` / L${item.source_order_line}`
                       : ""}
                   </td>
-                  <td className="num">{item.source_catalog_row ?? "—"}</td>
-                  <td className="ref-cell">
+                  <td className="num" data-label="CSV row">
+                    {item.source_catalog_row ?? "—"}
+                  </td>
+                  <td className="ref-cell" data-label="Reference">
                     {item.source_ref ? (
                       <button
                         type="button"
