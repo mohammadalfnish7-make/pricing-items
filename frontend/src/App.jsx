@@ -1,4 +1,5 @@
 import { Fragment, useEffect, useMemo, useState } from "react";
+import { LangSwitch, useI18n } from "./i18n.jsx";
 
 const API_BASE = import.meta.env.VITE_API_BASE || "";
 
@@ -34,6 +35,7 @@ function BrandMark() {
 }
 
 function LoginScreen({ onLoggedIn }) {
+  const { t, translateError } = useI18n();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
@@ -51,7 +53,7 @@ function LoginScreen({ onLoggedIn }) {
       });
       onLoggedIn(data.email);
     } catch (err) {
-      setError(err.message || "Login failed");
+      setError(translateError(err.message) || t("loginFailed"));
     } finally {
       setLoading(false);
     }
@@ -60,15 +62,18 @@ function LoginScreen({ onLoggedIn }) {
   return (
     <div className="app login-app">
       <section className="panel login-panel">
-        <BrandMark />
-        <h1 className="brand">Pricing</h1>
+        <div className="login-top">
+          <BrandMark />
+          <LangSwitch />
+        </div>
+        <h1 className="brand">{t("pricing")}</h1>
         <form className="login-form" onSubmit={onSubmit}>
           <input
             type="email"
             name="email"
             autoComplete="username"
             placeholder=" "
-            aria-label="Username"
+            aria-label={t("username")}
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
@@ -78,13 +83,13 @@ function LoginScreen({ onLoggedIn }) {
             name="password"
             autoComplete="current-password"
             placeholder=" "
-            aria-label="Password"
+            aria-label={t("password")}
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
           />
           <button type="submit" className="btn btn-primary" disabled={loading}>
-            {loading ? "Signing in…" : "Sign in"}
+            {loading ? t("signingIn") : t("signIn")}
           </button>
           {error ? <p className="status error">{error}</p> : null}
         </form>
@@ -93,9 +98,9 @@ function LoginScreen({ onLoggedIn }) {
   );
 }
 
-function money(value, currency = "USD") {
+function money(value, currency = "USD", locale = "en-US") {
   if (value == null || Number.isNaN(Number(value))) return "—";
-  return new Intl.NumberFormat("en-US", {
+  return new Intl.NumberFormat(locale, {
     style: "currency",
     currency,
     maximumFractionDigits: 2,
@@ -163,6 +168,7 @@ function downloadRefsCsv(result, pageKey) {
 }
 
 function CatalogSearch({ onSessionLost }) {
+  const { t, translateError } = useI18n();
   const [query, setQuery] = useState("");
   const [mode, setMode] = useState("fuzzy");
   const [loading, setLoading] = useState(false);
@@ -191,7 +197,7 @@ function CatalogSearch({ onSessionLost }) {
         if (err.status === 401) onSessionLost(null);
         setItems([]);
         setCount(0);
-        setError(err.message || "Search failed");
+        setError(translateError(err.message) || t("searchFailed"));
       } finally {
         setLoading(false);
       }
@@ -203,8 +209,8 @@ function CatalogSearch({ onSessionLost }) {
     <section className="panel search-panel">
       <div className="search-head">
         <div>
-          <h2>Search catalog</h2>
-          <p>Type a product name — results update as you type.</p>
+          <h2>{t("searchTitle")}</h2>
+          <p>{t("searchHint")}</p>
         </div>
         <div className="search-modes">
           <button
@@ -212,14 +218,14 @@ function CatalogSearch({ onSessionLost }) {
             className={`page-tab ${mode === "strict" ? "active" : ""}`}
             onClick={() => setMode("strict")}
           >
-            Strict
+            {t("strict")}
           </button>
           <button
             type="button"
             className={`page-tab ${mode === "fuzzy" ? "active" : ""}`}
             onClick={() => setMode("fuzzy")}
           >
-            Fuzzy
+            {t("fuzzy")}
           </button>
         </div>
       </div>
@@ -228,16 +234,16 @@ function CatalogSearch({ onSessionLost }) {
         type="search"
         value={query}
         onChange={(e) => setQuery(e.target.value)}
-        placeholder="Type: накладка бампера, амортизатор…"
+        placeholder={t("searchPlaceholder")}
         autoComplete="off"
       />
       <p className={`status search-status ${error ? "error" : ""}`}>
         {error
           ? error
           : loading
-            ? "Searching…"
+            ? t("searching")
             : query.trim()
-              ? `${count} match${count === 1 ? "" : "es"}`
+              ? t(count === 1 ? "matchesOne" : "matchesMany", { n: count })
               : ""}
       </p>
       {items.length ? (
@@ -245,34 +251,32 @@ function CatalogSearch({ onSessionLost }) {
           <table>
             <thead>
               <tr>
-                <th>Product</th>
-                <th>$/kg</th>
-                <th title="How closely the name matches a catalog product. Higher is better.">
-                  Match
-                </th>
-                <th>Country</th>
-                <th>Order</th>
-                <th>CSV row</th>
+                <th>{t("product")}</th>
+                <th>{t("perKg")}</th>
+                <th title={t("matchTitle")}>{t("match")}</th>
+                <th>{t("country")}</th>
+                <th>{t("order")}</th>
+                <th>{t("csvRow")}</th>
               </tr>
             </thead>
             <tbody>
               {items.map((item) => (
                 <tr key={`${item.catalog_file}-${item.catalog_row}`}>
-                  <td className="product" data-label="Product">
+                  <td className="product" data-label={t("product")}>
                     <strong>{item.product_name}</strong>
                     <span>
-                      {item.brand || item.manufacturer || "catalog"}
+                      {item.brand || item.manufacturer || t("catalog")}
                       {item.source_ref ? ` · ${item.catalog_file}` : ""}
                     </span>
                   </td>
-                  <td className="num" data-label="$/kg">{item.usd_per_kg ?? "—"}</td>
-                  <td className="num" data-label="Match">{item.match_score ?? "—"}</td>
-                  <td data-label="Country">{item.country || "—"}</td>
-                  <td className="num" data-label="Order">
+                  <td className="num" data-label={t("perKg")}>{item.usd_per_kg ?? "—"}</td>
+                  <td className="num" data-label={t("match")}>{item.match_score ?? "—"}</td>
+                  <td data-label={t("country")}>{item.country || "—"}</td>
+                  <td className="num" data-label={t("order")}>
                     {item.order_id || "—"}
                     {item.order_line ? ` / L${item.order_line}` : ""}
                   </td>
-                  <td className="num" data-label="CSV row">{item.catalog_row ?? "—"}</td>
+                  <td className="num" data-label={t("csvRow")}>{item.catalog_row ?? "—"}</td>
                 </tr>
               ))}
             </tbody>
@@ -284,6 +288,7 @@ function CatalogSearch({ onSessionLost }) {
 }
 
 function ResultsPanel({ page, pageKey, openRef, setOpenRef }) {
+  const { t, locale } = useI18n();
   const items = page?.items ?? [];
   if (!page) return null;
 
@@ -291,52 +296,51 @@ function ResultsPanel({ page, pageKey, openRef, setOpenRef }) {
     <>
       <section className="stats">
         <div className="stat">
-          <span className="label">Items</span>
+          <span className="label">{t("items")}</span>
           <span className="value">{page.item_count}</span>
         </div>
         <div className="stat">
-          <span className="label">Priced lines</span>
+          <span className="label">{t("pricedLines")}</span>
           <span className="value">{page.priced_count}</span>
         </div>
         <div className="stat">
-          <span className="label">Catalog match</span>
+          <span className="label">{t("catalogMatch")}</span>
           <span className="value">
             {page.catalog_matched ?? 0}/{page.item_count}
           </span>
         </div>
         <div className="stat">
-          <span className="label">Total</span>
+          <span className="label">{t("total")}</span>
           <span className="value">
-            {money(page.totals?.line_cost, page.currency)}
+            {money(page.totals?.line_cost, page.currency, locale)}
           </span>
         </div>
       </section>
 
       {(page.country_diff_count ?? 0) > 0 ? (
         <p className="status warn-banner">
-          Country differences on {page.country_diff_count} line(s) — check the
-          Country column.
+          {t("countryDiff", { n: page.country_diff_count })}
         </p>
       ) : null}
 
       <p className="status note-line">
         {pageKey === "fuzzy" ? (
           <>
-            <strong>Page 2 — Fuzzy match</strong>
+            <strong>{t("pageFuzzy")}</strong>
             {" · "}
-            looser name matching (not specific). Review refs carefully.
+            {t("pageFuzzyHint")}
           </>
         ) : (
           <>
-            <strong>Page 1 — Strict match</strong>
+            <strong>{t("pageStrict")}</strong>
             {" · "}
-            closer name match only.
+            {t("pageStrictHint")}
           </>
         )}
         {" · "}
         <code>$/kg = Итого ÷ gross kg</code>
         {" · "}
-        Match = name closeness (1.00 is strong)
+        {t("matchNote")}
       </p>
 
       <div className="actions result-actions">
@@ -345,7 +349,7 @@ function ResultsPanel({ page, pageKey, openRef, setOpenRef }) {
           className="btn btn-ghost"
           onClick={() => downloadRefsCsv(page, pageKey)}
         >
-          Download refs CSV
+          {t("downloadRefs")}
         </button>
       </div>
 
@@ -354,15 +358,13 @@ function ResultsPanel({ page, pageKey, openRef, setOpenRef }) {
           <thead>
             <tr>
               <th>#</th>
-              <th>Product</th>
-              <th>$/kg</th>
-              <th title="How closely the uploaded name matches a catalog product. Higher is better.">
-                Match
-              </th>
-              <th>Country</th>
-              <th>Source order</th>
-              <th>CSV row</th>
-              <th>Reference</th>
+              <th>{t("product")}</th>
+              <th>{t("perKg")}</th>
+              <th title={t("matchTitle")}>{t("match")}</th>
+              <th>{t("country")}</th>
+              <th>{t("sourceOrder")}</th>
+              <th>{t("csvRow")}</th>
+              <th>{t("reference")}</th>
             </tr>
           </thead>
           <tbody>
@@ -372,23 +374,23 @@ function ResultsPanel({ page, pageKey, openRef, setOpenRef }) {
                   <td className="num" data-label="#">
                     {item.line_no || "—"}
                   </td>
-                  <td className="product" data-label="Product">
+                  <td className="product" data-label={t("product")}>
                     <strong>{item.product_name || "—"}</strong>
                     <span>
                       {item.matched_product
-                        ? `matched: ${item.matched_product}`
+                        ? t("matched", { name: item.matched_product })
                         : item.match_status === "unmatched"
-                          ? "no catalog match"
+                          ? t("noCatalogMatch")
                           : "—"}
                     </span>
                   </td>
-                  <td className="num" data-label="$/kg">
+                  <td className="num" data-label={t("perKg")}>
                     {item.price_per_kg != null ? item.price_per_kg : "—"}
                   </td>
-                  <td className="num" data-label="Match">
+                  <td className="num" data-label={t("match")}>
                     {item.match_score ?? "—"}
                   </td>
-                  <td data-label="Country">
+                  <td data-label={t("country")}>
                     {item.country_diff ? (
                       <span
                         className="chip chip-warn"
@@ -401,16 +403,16 @@ function ResultsPanel({ page, pageKey, openRef, setOpenRef }) {
                       item.country_of_origin || item.source_country || "—"
                     )}
                   </td>
-                  <td className="num" data-label="Source order">
+                  <td className="num" data-label={t("sourceOrder")}>
                     {item.source_order_id || item.order_id || "—"}
                     {item.source_order_line
                       ? ` / L${item.source_order_line}`
                       : ""}
                   </td>
-                  <td className="num" data-label="CSV row">
+                  <td className="num" data-label={t("csvRow")}>
                     {item.source_catalog_row ?? "—"}
                   </td>
-                  <td className="ref-cell" data-label="Reference">
+                  <td className="ref-cell" data-label={t("reference")}>
                     {item.source_ref ? (
                       <button
                         type="button"
@@ -420,7 +422,7 @@ function ResultsPanel({ page, pageKey, openRef, setOpenRef }) {
                         }
                         title={item.source_ref}
                       >
-                        {item.source_catalog_file || "catalog"}
+                        {item.source_catalog_file || t("catalog")}
                         {item.source_catalog_row
                           ? ` #${item.source_catalog_row}`
                           : ""}
@@ -429,7 +431,7 @@ function ResultsPanel({ page, pageKey, openRef, setOpenRef }) {
                           : ""}
                       </button>
                     ) : (
-                      <span className="chip">unmatched</span>
+                      <span className="chip">{t("unmatched")}</span>
                     )}
                   </td>
                 </tr>
@@ -461,6 +463,7 @@ function ResultsPanel({ page, pageKey, openRef, setOpenRef }) {
 }
 
 export default function App() {
+  const { t, translateError } = useI18n();
   const [user, setUser] = useState(null);
   const [authReady, setAuthReady] = useState(false);
   const [file, setFile] = useState(null);
@@ -509,7 +512,7 @@ export default function App() {
       setResult(data);
     } catch (err) {
       if (err.status === 401) setUser(null);
-      setError(err.message || "Something went wrong");
+      setError(translateError(err.message) || t("genericError"));
     } finally {
       setLoading(false);
     }
@@ -538,7 +541,7 @@ export default function App() {
   if (!authReady) {
     return (
       <div className="app login-app">
-        <p className="status">Loading…</p>
+        <p className="status">{t("loading")}</p>
       </div>
     );
   }
@@ -553,17 +556,16 @@ export default function App() {
         <div className="hero-top">
           <div>
             <BrandMark />
-            <h1 className="brand">Pricing</h1>
+            <h1 className="brand">{t("pricing")}</h1>
           </div>
-          <button type="button" className="btn btn-ghost" onClick={logout}>
-            Sign out
-          </button>
+          <div className="hero-actions">
+            <LangSwitch />
+            <button type="button" className="btn btn-ghost" onClick={logout}>
+              {t("signOut")}
+            </button>
+          </div>
         </div>
-        <p className="lede">
-          Upload a CSV or Excel list. Actual $/kg = Итого ÷ gross kg
-          (order file: E÷N · merged CSV: F÷Q). Two match pages: strict and
-          fuzzy.
-        </p>
+        <p className="lede">{t("lede")}</p>
       </header>
 
       <CatalogSearch onSessionLost={setUser} />
@@ -583,11 +585,11 @@ export default function App() {
             if (next) onPick(next);
           }}
         >
-          <h2>Drop your items file</h2>
-          <p>Accepts .csv, .xlsx, and .xls — order exports or name lists.</p>
+          <h2>{t("dropTitle")}</h2>
+          <p>{t("dropHint")}</p>
           <div className="actions">
             <button type="button" className="btn btn-primary" disabled={loading}>
-              {loading ? "Pricing…" : "Choose file"}
+              {loading ? t("pricingNow") : t("chooseFile")}
             </button>
             {previewName ? (
               <button
@@ -596,11 +598,13 @@ export default function App() {
                 onClick={() => priceFile(file)}
                 disabled={loading || !file}
               >
-                Re-run
+                {t("rerun")}
               </button>
             ) : null}
           </div>
-          {previewName ? <p className="status">Selected: {previewName}</p> : null}
+          {previewName ? (
+            <p className="status">{t("selected", { name: previewName })}</p>
+          ) : null}
           <input
             type="file"
             accept=".csv,.xlsx,.xlsm,.xls,application/vnd.ms-excel"
@@ -608,13 +612,13 @@ export default function App() {
           />
         </div>
         <p className={`status ${error ? "error" : ""}`}>
-          {error || (loading ? "Parsing and pricing items…" : "")}
+          {error || (loading ? t("parsing") : "")}
         </p>
       </section>
 
       {result ? (
         <>
-          <nav className="page-tabs" aria-label="Match pages">
+          <nav className="page-tabs" aria-label={t("matchPages")}>
             <button
               type="button"
               className={`page-tab ${pageKey === "strict" ? "active" : ""}`}
@@ -623,7 +627,7 @@ export default function App() {
                 setOpenRef(null);
               }}
             >
-              Page 1 · Strict
+              {t("page1Strict")}
               {strictMatched != null ? ` (${strictMatched})` : ""}
             </button>
             <button
@@ -634,7 +638,7 @@ export default function App() {
                 setOpenRef(null);
               }}
             >
-              Page 2 · Fuzzy
+              {t("page2Fuzzy")}
               {fuzzyMatched != null ? ` (${fuzzyMatched})` : ""}
             </button>
           </nav>
