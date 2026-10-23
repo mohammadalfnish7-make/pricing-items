@@ -15,7 +15,28 @@ from collections import defaultdict
 from functools import lru_cache
 from pathlib import Path
 from statistics import median
-from typing import Any
+from typing import Any, Literal, TypedDict
+
+MatchMode = Literal["strict", "fuzzy"]
+
+
+class SearchHit(TypedDict):
+    product_name: str
+    match_score: float
+    usd_per_kg: float
+    itogo: float
+    gross_weight_kg: float
+    quantity_units: float
+    kg_per_unit: float
+    cost_per_unit_usd: float
+    country: str | None
+    brand: str | None
+    manufacturer: str | None
+    order_id: str | None
+    order_line: str | None
+    catalog_file: str
+    catalog_row: int
+    source_ref: str
 
 DEFAULT_CATALOG_PATHS = (
     Path(os.environ.get("CATALOG_PATH", "")),
@@ -191,6 +212,84 @@ def load_catalog() -> tuple[dict[str, Any], ...]:
             entry["source_ref"] = _format_ref(entry)
             entries.append(entry)
     return tuple(entries)
+
+
+def search_catalog(
+    query: str,
+    *,
+    mode: MatchMode = "fuzzy",
+    limit: int = 25,
+) -> list[SearchHit]:
+    """Rank catalog rows as the user types a product name."""
+    catalog = load_catalog()
+    q_raw = (query or "").strip()
+    if not catalog or not q_raw:
+        return []
+
+    mode = "fuzzy" if mode == "fuzzy" else "strict"
+    q_norm = _norm(q_raw)
+    q_toks = _tokens(q_raw)
+    if not q_norm:
+        return []
+
+    cap = max(1, min(int(limit), 100))
+    scored: list[tuple[float, str, dict[str, Any]]] = []
+    for entry in catalog:
+        name = str(entry["name"])
+        name_norm = _norm(name)
+        cover = _score(q_toks, entry["toks"], mode=mode) if q_toks else 0.0
+
+        extra = 0.0
+        if name_norm == q_norm:
+            extra = 2.0
+        elif name_norm.startswith(q_norm):
+            extra = 1.2
+        elif q_norm in name_norm:
+            extra = 0.8
+        elif mode == "fuzzy" and any(
+            nt.startswith(qt) or qt in nt
+            for qt in q_toks
+            for nt in entry["toks"]
+            if len(qt) >= 2
+        ):
+            extra = 0.35
+
+        rank = cover + extra
+        if rank <= 0:
+            continue
+        scored.append((rank, name, entry))
+
+    scored.sort(key=lambda row: (-row[0], row[1]))
+    hits: list[SearchHit] = []
+    seen: set[tuple[str, int]] = set()
+    for rank, _name, entry in scored:
+        key = (str(entry["catalog_file"]), int(entry["catalog_row"]))
+        if key in seen:
+            continue
+        seen.add(key)
+        hits.append(
+            {
+                "product_name": str(entry["name"]),
+                "match_score": round(float(rank), 2),
+                "usd_per_kg": float(entry["usd_per_kg"]),
+                "itogo": float(entry["itogo"]),
+                "gross_weight_kg": float(entry["gross"]),
+                "quantity_units": float(entry["qty"]),
+                "kg_per_unit": round(float(entry["kg_per_unit"]), 6),
+                "cost_per_unit_usd": round(float(entry["cost_per_unit"]), 4),
+                "country": entry["country"] or None,
+                "brand": entry["brand"] or None,
+                "manufacturer": entry["manufacturer"] or None,
+                "order_id": entry["order_id"] or None,
+                "order_line": entry["source_line_no"] or None,
+                "catalog_file": str(entry["catalog_file"]),
+                "catalog_row": int(entry["catalog_row"]),
+                "source_ref": str(entry["source_ref"]),
+            }
+        )
+        if len(hits) >= cap:
+            break
+    return hits
 
 
 def match_catalog(product_name: str, mode: str = "strict") -> dict[str, Any] | None:

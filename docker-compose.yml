@@ -9,6 +9,9 @@ services:
       - "8000"
     environment:
       CATALOG_PATH: /data/all_orders_merged.csv
+      AUTH_EMAIL: ${AUTH_EMAIL:-}
+      AUTH_PASSWORD: ${AUTH_PASSWORD:-}
+      AUTH_SECRET: ${AUTH_SECRET:-}
     restart: unless-stopped
     healthcheck:
       test:

@@ -1,6 +1,91 @@
-import { Fragment, useMemo, useState } from "react";
+import { Fragment, useEffect, useMemo, useState } from "react";
 
 const API_BASE = import.meta.env.VITE_API_BASE || "";
+
+async function api(path, options = {}) {
+  const res = await fetch(`${API_BASE}${path}`, {
+    credentials: "include",
+    ...options,
+  });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) {
+    const detail = data.detail;
+    const message =
+      typeof detail === "string"
+        ? detail
+        : Array.isArray(detail)
+          ? detail.map((d) => d.msg || d).join(", ")
+          : res.status === 401
+            ? "Not authenticated"
+            : "Request failed";
+    const err = new Error(message);
+    err.status = res.status;
+    throw err;
+  }
+  return data;
+}
+
+function LoginScreen({ onLoggedIn }) {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+
+  async function onSubmit(e) {
+    e.preventDefault();
+    setLoading(true);
+    setError("");
+    try {
+      const data = await api("/api/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
+      });
+      onLoggedIn(data.email);
+    } catch (err) {
+      setError(err.message || "Login failed");
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  return (
+    <div className="app login-app">
+      <section className="panel login-panel">
+        <h1 className="brand">Pricing Items</h1>
+        <p className="lede">Sign in with the email and password set in Coolify.</p>
+        <form className="login-form" onSubmit={onSubmit}>
+          <label>
+            Email
+            <input
+              type="email"
+              name="email"
+              autoComplete="username"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+          </label>
+          <label>
+            Password
+            <input
+              type="password"
+              name="password"
+              autoComplete="current-password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+          </label>
+          <button type="submit" className="btn btn-primary" disabled={loading}>
+            {loading ? "Signing in…" : "Sign in"}
+          </button>
+          {error ? <p className="status error">{error}</p> : null}
+        </form>
+      </section>
+    </div>
+  );
+}
 
 function money(value, currency = "USD") {
   if (value == null || Number.isNaN(Number(value))) return "—";
@@ -69,6 +154,125 @@ function downloadRefsCsv(result, pageKey) {
   a.download = `${(result.filename || "pricing").replace(/\.[^.]+$/, "")}_${pageKey || "refs"}.csv`;
   a.click();
   URL.revokeObjectURL(url);
+}
+
+function CatalogSearch({ onSessionLost }) {
+  const [query, setQuery] = useState("");
+  const [mode, setMode] = useState("fuzzy");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [items, setItems] = useState([]);
+  const [count, setCount] = useState(0);
+
+  useEffect(() => {
+    const q = query.trim();
+    if (!q) {
+      setItems([]);
+      setCount(0);
+      setError("");
+      setLoading(false);
+      return undefined;
+    }
+    const timer = setTimeout(async () => {
+      setLoading(true);
+      setError("");
+      try {
+        const params = new URLSearchParams({ q, mode, limit: "25" });
+        const data = await api(`/api/search?${params}`);
+        setItems(data.items || []);
+        setCount(data.count || 0);
+      } catch (err) {
+        if (err.status === 401) onSessionLost(null);
+        setItems([]);
+        setCount(0);
+        setError(err.message || "Search failed");
+      } finally {
+        setLoading(false);
+      }
+    }, 220);
+    return () => clearTimeout(timer);
+  }, [query, mode, onSessionLost]);
+
+  return (
+    <section className="panel search-panel">
+      <div className="search-head">
+        <div>
+          <h2>Search catalog</h2>
+          <p>Type a product name — results update as you type.</p>
+        </div>
+        <div className="search-modes">
+          <button
+            type="button"
+            className={`page-tab ${mode === "strict" ? "active" : ""}`}
+            onClick={() => setMode("strict")}
+          >
+            Strict
+          </button>
+          <button
+            type="button"
+            className={`page-tab ${mode === "fuzzy" ? "active" : ""}`}
+            onClick={() => setMode("fuzzy")}
+          >
+            Fuzzy
+          </button>
+        </div>
+      </div>
+      <input
+        className="search-input"
+        type="search"
+        value={query}
+        onChange={(e) => setQuery(e.target.value)}
+        placeholder="Type: накладка бампера, амортизатор…"
+        autoComplete="off"
+      />
+      <p className={`status search-status ${error ? "error" : ""}`}>
+        {error
+          ? error
+          : loading
+            ? "Searching…"
+            : query.trim()
+              ? `${count} match${count === 1 ? "" : "es"}`
+              : ""}
+      </p>
+      {items.length ? (
+        <div className="table-wrap search-table">
+          <table>
+            <thead>
+              <tr>
+                <th>Product</th>
+                <th>$/kg</th>
+                <th>Score</th>
+                <th>Country</th>
+                <th>Order</th>
+                <th>CSV row</th>
+              </tr>
+            </thead>
+            <tbody>
+              {items.map((item) => (
+                <tr key={`${item.catalog_file}-${item.catalog_row}`}>
+                  <td className="product">
+                    <strong>{item.product_name}</strong>
+                    <span>
+                      {item.brand || item.manufacturer || "catalog"}
+                      {item.source_ref ? ` · ${item.catalog_file}` : ""}
+                    </span>
+                  </td>
+                  <td className="num">{item.usd_per_kg ?? "—"}</td>
+                  <td className="num">{item.match_score ?? "—"}</td>
+                  <td>{item.country || "—"}</td>
+                  <td className="num">
+                    {item.order_id || "—"}
+                    {item.order_line ? ` / L${item.order_line}` : ""}
+                  </td>
+                  <td className="num">{item.catalog_row ?? "—"}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      ) : null}
+    </section>
+  );
 }
 
 function ResultsPanel({ page, pageKey, openRef, setOpenRef }) {
@@ -242,6 +446,8 @@ function ResultsPanel({ page, pageKey, openRef, setOpenRef }) {
 }
 
 export default function App() {
+  const [user, setUser] = useState(null);
+  const [authReady, setAuthReady] = useState(false);
   const [file, setFile] = useState(null);
   const [dragOver, setDragOver] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -249,6 +455,23 @@ export default function App() {
   const [result, setResult] = useState(null);
   const [pageKey, setPageKey] = useState("strict");
   const [openRef, setOpenRef] = useState(null);
+
+  useEffect(() => {
+    let cancelled = false;
+    api("/api/me")
+      .then((data) => {
+        if (!cancelled) setUser(data.email);
+      })
+      .catch(() => {
+        if (!cancelled) setUser(null);
+      })
+      .finally(() => {
+        if (!cancelled) setAuthReady(true);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   const previewName = useMemo(() => file?.name ?? "", [file]);
 
@@ -267,16 +490,10 @@ export default function App() {
     try {
       const body = new FormData();
       body.append("file", selected);
-      const res = await fetch(`${API_BASE}/api/price`, {
-        method: "POST",
-        body,
-      });
-      const data = await res.json().catch(() => ({}));
-      if (!res.ok) {
-        throw new Error(data.detail || "Upload failed");
-      }
+      const data = await api("/api/price", { method: "POST", body });
       setResult(data);
     } catch (err) {
+      if (err.status === 401) setUser(null);
       setError(err.message || "Something went wrong");
     } finally {
       setLoading(false);
@@ -288,19 +505,50 @@ export default function App() {
     if (next) priceFile(next);
   }
 
+  async function logout() {
+    try {
+      await api("/api/logout", { method: "POST" });
+    } catch {
+      /* still clear local session */
+    }
+    setUser(null);
+    setFile(null);
+    setResult(null);
+    setError("");
+  }
+
   const strictMatched = result?.pages?.strict?.catalog_matched;
   const fuzzyMatched = result?.pages?.fuzzy?.catalog_matched;
+
+  if (!authReady) {
+    return (
+      <div className="app login-app">
+        <p className="status">Loading…</p>
+      </div>
+    );
+  }
+
+  if (!user) {
+    return <LoginScreen onLoggedIn={setUser} />;
+  }
 
   return (
     <div className="app">
       <header className="hero">
-        <h1 className="brand">Pricing Items</h1>
+        <div className="hero-top">
+          <h1 className="brand">Pricing Items</h1>
+          <button type="button" className="btn btn-ghost" onClick={logout}>
+            Sign out
+          </button>
+        </div>
         <p className="lede">
           Upload a CSV or Excel list. Actual $/kg = Итого ÷ gross kg
           (order file: E÷N · merged CSV: F÷Q). Two match pages: strict and
           fuzzy.
         </p>
       </header>
+
+      <CatalogSearch onSessionLost={setUser} />
 
       <section className="panel">
         <div
