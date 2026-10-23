@@ -67,6 +67,46 @@ input,
   gap: 1rem;
 }
 
+.hero-actions,
+.login-top {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+.login-top {
+  justify-content: space-between;
+  margin-bottom: 1.1rem;
+}
+
+.login-panel .brand-mark {
+  margin-bottom: 0;
+}
+
+.lang-switch {
+  display: inline-flex;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  overflow: hidden;
+  background: var(--bg-elevated);
+}
+
+.lang-switch button {
+  border: 0;
+  background: transparent;
+  color: var(--muted);
+  font-weight: 600;
+  font-size: 0.78rem;
+  letter-spacing: 0.04em;
+  padding: 0.45rem 0.7rem;
+  cursor: pointer;
+}
+
+.lang-switch button.active {
+  background: var(--accent);
+  color: var(--accent-ink);
+}
+
 .login-app {
   min-height: 100dvh;
   display: grid;
@@ -89,10 +129,6 @@ input,
   height: 36px;
   width: auto;
   display: block;
-}
-
-.login-panel .brand-mark {
-  margin-bottom: 1.1rem;
 }
 
 .login-panel .brand-mark img {
@@ -551,6 +587,16 @@ td.num {
     width: auto;
     min-width: 6.5rem;
     padding: 0.65rem 0.95rem;
+  }
+
+  .hero-actions {
+    flex-wrap: wrap;
+    justify-content: flex-end;
+  }
+
+  .lang-switch button {
+    min-height: 40px;
+    padding: 0.5rem 0.75rem;
   }
 
   .search-head {
