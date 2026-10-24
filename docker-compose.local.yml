@@ -6,6 +6,9 @@ services:
       - "8000:8000"
     volumes:
       - ./data:/data:ro
+      - ./var/pricing:/var/lib/pricing
+    environment:
+      QUOTES_DB_PATH: /var/lib/pricing/quotes.db
 
   frontend:
     ports:
