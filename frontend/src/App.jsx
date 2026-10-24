@@ -1,5 +1,7 @@
 import { Fragment, useEffect, useMemo, useState } from "react";
+import { Calculator } from "./Calculator.jsx";
 import { LangSwitch, useI18n } from "./i18n.jsx";
+import { QuotesPanel } from "./Quotes.jsx";
 
 const API_BASE = import.meta.env.VITE_API_BASE || "";
 
@@ -167,7 +169,7 @@ function downloadRefsCsv(result, pageKey) {
   URL.revokeObjectURL(url);
 }
 
-function CatalogSearch({ onSessionLost }) {
+function CatalogSearch({ onSessionLost, onUseInCalculator }) {
   const { t, translateError } = useI18n();
   const [query, setQuery] = useState("");
   const [mode, setMode] = useState("fuzzy");
@@ -257,6 +259,7 @@ function CatalogSearch({ onSessionLost }) {
                 <th>{t("country")}</th>
                 <th>{t("order")}</th>
                 <th>{t("csvRow")}</th>
+                <th />
               </tr>
             </thead>
             <tbody>
@@ -277,6 +280,18 @@ function CatalogSearch({ onSessionLost }) {
                     {item.order_line ? ` / L${item.order_line}` : ""}
                   </td>
                   <td className="num" data-label={t("csvRow")}>{item.catalog_row ?? "—"}</td>
+                  <td data-label={t("useInCalculator")} className="quote-open-cell">
+                    {item.usd_per_kg != null && onUseInCalculator ? (
+                      <button
+                        type="button"
+                        className="btn btn-ghost"
+                        onClick={() => onUseInCalculator(item.usd_per_kg)}
+                        title={t("calcCustomsHint")}
+                      >
+                        {t("useInCalculator")}
+                      </button>
+                    ) : null}
+                  </td>
                 </tr>
               ))}
             </tbody>
@@ -287,7 +302,7 @@ function CatalogSearch({ onSessionLost }) {
   );
 }
 
-function ResultsPanel({ page, pageKey, openRef, setOpenRef }) {
+function ResultsPanel({ page, pageKey, openRef, setOpenRef, onCreateQuote, onUseInCalculator }) {
   const { t, locale } = useI18n();
   const items = page?.items ?? [];
   if (!page) return null;
@@ -340,6 +355,8 @@ function ResultsPanel({ page, pageKey, openRef, setOpenRef }) {
         {" · "}
         <code>$/kg = Итого ÷ gross kg</code>
         {" · "}
+        {t("calcCustomsHint")}
+        {" · "}
         {t("matchNote")}
       </p>
 
@@ -350,6 +367,19 @@ function ResultsPanel({ page, pageKey, openRef, setOpenRef }) {
           onClick={() => downloadRefsCsv(page, pageKey)}
         >
           {t("downloadRefs")}
+        </button>
+        <button
+          type="button"
+          className="btn btn-primary"
+          onClick={() =>
+            onCreateQuote?.({
+              items: page.items,
+              filename: page.filename,
+              matchMode: pageKey,
+            })
+          }
+        >
+          {t("createQuoteFromResults")}
         </button>
       </div>
 
@@ -385,7 +415,18 @@ function ResultsPanel({ page, pageKey, openRef, setOpenRef }) {
                     </span>
                   </td>
                   <td className="num" data-label={t("perKg")}>
-                    {item.price_per_kg != null ? item.price_per_kg : "—"}
+                    {item.price_per_kg != null ? (
+                      <button
+                        type="button"
+                        className="ref-btn"
+                        title={t("useInCalculator")}
+                        onClick={() => onUseInCalculator?.(item.price_per_kg)}
+                      >
+                        {item.price_per_kg}
+                      </button>
+                    ) : (
+                      "—"
+                    )}
                   </td>
                   <td className="num" data-label={t("match")}>
                     {item.match_score ?? "—"}
@@ -473,6 +514,15 @@ export default function App() {
   const [result, setResult] = useState(null);
   const [pageKey, setPageKey] = useState("strict");
   const [openRef, setOpenRef] = useState(null);
+  const [quoteSeed, setQuoteSeed] = useState(null);
+  const [mainView, setMainView] = useState("pricing"); // pricing | calculator | quotes
+  const [seedCustoms, setSeedCustoms] = useState(null);
+
+  function useCustomsInCalculator(usdPerKg) {
+    if (usdPerKg == null || Number.isNaN(Number(usdPerKg))) return;
+    setSeedCustoms(Number(usdPerKg));
+    setMainView("calculator");
+  }
 
   useEffect(() => {
     let cancelled = false;
@@ -510,6 +560,7 @@ export default function App() {
       body.append("file", selected);
       const data = await api("/api/price", { method: "POST", body });
       setResult(data);
+      setQuoteSeed(null);
     } catch (err) {
       if (err.status === 401) setUser(null);
       setError(translateError(err.message) || t("genericError"));
@@ -566,89 +617,146 @@ export default function App() {
           </div>
         </div>
         <p className="lede">{t("lede")}</p>
+        <nav className="page-tabs main-nav" aria-label="Main">
+          <button
+            type="button"
+            className={`page-tab ${mainView === "pricing" ? "active" : ""}`}
+            onClick={() => setMainView("pricing")}
+          >
+            {t("navPricing")}
+          </button>
+          <button
+            type="button"
+            className={`page-tab ${mainView === "calculator" ? "active" : ""}`}
+            onClick={() => setMainView("calculator")}
+          >
+            {t("navCalculator")}
+          </button>
+          <button
+            type="button"
+            className={`page-tab ${mainView === "quotes" ? "active" : ""}`}
+            onClick={() => setMainView("quotes")}
+          >
+            {t("navQuotes")}
+          </button>
+        </nav>
       </header>
 
-      <CatalogSearch onSessionLost={setUser} />
+      {mainView === "calculator" ? (
+        <Calculator
+          api={api}
+          onSessionLost={setUser}
+          seedCustoms={seedCustoms}
+          onSeedCustomsConsumed={() => setSeedCustoms(null)}
+        />
+      ) : null}
 
-      <section className="panel">
-        <div
-          className={`dropzone ${dragOver ? "active" : ""}`}
-          onDragOver={(e) => {
-            e.preventDefault();
-            setDragOver(true);
-          }}
-          onDragLeave={() => setDragOver(false)}
-          onDrop={(e) => {
-            e.preventDefault();
-            setDragOver(false);
-            const next = e.dataTransfer.files?.[0];
-            if (next) onPick(next);
-          }}
-        >
-          <h2>{t("dropTitle")}</h2>
-          <p>{t("dropHint")}</p>
-          <div className="actions">
-            <button type="button" className="btn btn-primary" disabled={loading}>
-              {loading ? t("pricingNow") : t("chooseFile")}
-            </button>
-            {previewName ? (
-              <button
-                type="button"
-                className="btn btn-ghost"
-                onClick={() => priceFile(file)}
-                disabled={loading || !file}
-              >
-                {t("rerun")}
-              </button>
-            ) : null}
-          </div>
-          {previewName ? (
-            <p className="status">{t("selected", { name: previewName })}</p>
-          ) : null}
-          <input
-            type="file"
-            accept=".csv,.xlsx,.xlsm,.xls,application/vnd.ms-excel"
-            onChange={(e) => onPick(e.target.files?.[0] || null)}
+      {mainView === "quotes" ? (
+        <div id="quotes-panel">
+          <QuotesPanel
+            api={api}
+            onSessionLost={setUser}
+            seedItems={quoteSeed?.items || null}
+            seedFilename={quoteSeed?.filename || null}
+            seedMatchMode={quoteSeed?.matchMode || pageKey}
+            onSeedConsumed={() => setQuoteSeed(null)}
           />
         </div>
-        <p className={`status ${error ? "error" : ""}`}>
-          {error || (loading ? t("parsing") : "")}
-        </p>
-      </section>
+      ) : null}
 
-      {result ? (
+      {mainView === "pricing" ? (
         <>
-          <nav className="page-tabs" aria-label={t("matchPages")}>
-            <button
-              type="button"
-              className={`page-tab ${pageKey === "strict" ? "active" : ""}`}
-              onClick={() => {
-                setPageKey("strict");
-                setOpenRef(null);
-              }}
-            >
-              {t("page1Strict")}
-              {strictMatched != null ? ` (${strictMatched})` : ""}
-            </button>
-            <button
-              type="button"
-              className={`page-tab ${pageKey === "fuzzy" ? "active" : ""}`}
-              onClick={() => {
-                setPageKey("fuzzy");
-                setOpenRef(null);
-              }}
-            >
-              {t("page2Fuzzy")}
-              {fuzzyMatched != null ? ` (${fuzzyMatched})` : ""}
-            </button>
-          </nav>
-
-          <ResultsPanel
-            page={activePage}
-            pageKey={pageKey}
-            openRef={openRef}
-            setOpenRef={setOpenRef}
+          <CatalogSearch
+            onSessionLost={setUser}
+            onUseInCalculator={useCustomsInCalculator}
           />
+
+          <section className="panel">
+            <div
+              className={`dropzone ${dragOver ? "active" : ""}`}
+              onDragOver={(e) => {
+                e.preventDefault();
+                setDragOver(true);
+              }}
+              onDragLeave={() => setDragOver(false)}
+              onDrop={(e) => {
+                e.preventDefault();
+                setDragOver(false);
+                const next = e.dataTransfer.files?.[0];
+                if (next) onPick(next);
+              }}
+            >
+              <h2>{t("dropTitle")}</h2>
+              <p>{t("dropHint")}</p>
+              <div className="actions">
+                <button type="button" className="btn btn-primary" disabled={loading}>
+                  {loading ? t("pricingNow") : t("chooseFile")}
+                </button>
+                {previewName ? (
+                  <button
+                    type="button"
+                    className="btn btn-ghost"
+                    onClick={() => priceFile(file)}
+                    disabled={loading || !file}
+                  >
+                    {t("rerun")}
+                  </button>
+                ) : null}
+              </div>
+              {previewName ? (
+                <p className="status">{t("selected", { name: previewName })}</p>
+              ) : null}
+              <input
+                type="file"
+                accept=".csv,.xlsx,.xlsm,.xls,application/vnd.ms-excel"
+                onChange={(e) => onPick(e.target.files?.[0] || null)}
+              />
+            </div>
+            <p className={`status ${error ? "error" : ""}`}>
+              {error || (loading ? t("parsing") : "")}
+            </p>
+          </section>
+
+          {result ? (
+            <>
+              <nav className="page-tabs" aria-label={t("matchPages")}>
+                <button
+                  type="button"
+                  className={`page-tab ${pageKey === "strict" ? "active" : ""}`}
+                  onClick={() => {
+                    setPageKey("strict");
+                    setOpenRef(null);
+                  }}
+                >
+                  {t("page1Strict")}
+                  {strictMatched != null ? ` (${strictMatched})` : ""}
+                </button>
+                <button
+                  type="button"
+                  className={`page-tab ${pageKey === "fuzzy" ? "active" : ""}`}
+                  onClick={() => {
+                    setPageKey("fuzzy");
+                    setOpenRef(null);
+                  }}
+                >
+                  {t("page2Fuzzy")}
+                  {fuzzyMatched != null ? ` (${fuzzyMatched})` : ""}
+                </button>
+              </nav>
+
+              <ResultsPanel
+                page={activePage}
+                pageKey={pageKey}
+                openRef={openRef}
+                setOpenRef={setOpenRef}
+                onUseInCalculator={useCustomsInCalculator}
+                onCreateQuote={(seed) => {
+                  setQuoteSeed(seed);
+                  setMainView("quotes");
+                }}
+              />
+            </>
+          ) : null}
         </>
       ) : null}
     </div>

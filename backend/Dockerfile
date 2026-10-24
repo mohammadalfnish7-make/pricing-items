@@ -5,12 +5,15 @@ WORKDIR /app
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
 ENV CATALOG_PATH=/data/all_orders_merged.csv
+ENV QUOTES_DB_PATH=/var/lib/pricing/quotes.db
 
 COPY backend/requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 COPY backend/app ./app
 COPY data/all_orders_merged.csv /data/all_orders_merged.csv
+
+RUN mkdir -p /var/lib/pricing
 
 EXPOSE 8000
 

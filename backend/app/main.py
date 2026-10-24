@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import os
+from contextlib import asynccontextmanager
 from pathlib import Path
 
 from fastapi import Depends, FastAPI, File, HTTPException, Query, Request, UploadFile
@@ -17,18 +18,38 @@ from app.auth import (
     require_session,
     verify_credentials,
 )
+from app.calc import CalcRequest, run_quote_calc
 from app.catalog import MatchMode, load_catalog, search_catalog
 from app.pricing import process_upload
+from app.quotes import (
+    QuoteCreate,
+    QuotePatch,
+    create_quote,
+    get_quote,
+    init_db,
+    issue_quote,
+    list_quotes,
+    quote_breakdown,
+    update_quote,
+)
+
+
+@asynccontextmanager
+async def lifespan(_app: FastAPI):
+    init_db()
+    yield
+
 
 app = FastAPI(
     title="Pricing Items API",
-    description="Upload a list of order items (CSV/XLSX) and get cost per line.",
-    version="1.0.0",
+    description="Upload order items, match catalog costs, and prepare customer quotations.",
+    version="1.1.0",
+    lifespan=lifespan,
 )
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000", "http://127.0.0.1:3000"],
+    allow_origins=["http://localhost:3000", "http://127.0.0.1:3000", "http://localhost:5173"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -52,11 +73,14 @@ def _set_session_cookie(response: JSONResponse, request: Request, token: str) ->
 @app.get("/api/health")
 def health() -> dict:
     catalog = Path(os.environ.get("CATALOG_PATH", "/data/all_orders_merged.csv"))
+    quotes_db = Path(os.environ.get("QUOTES_DB_PATH", "/var/lib/pricing/quotes.db"))
     return {
         "status": "ok",
         "catalog": catalog.name if catalog.is_file() else None,
         "catalog_ok": catalog.is_file(),
         "auth_configured": auth_configured(),
+        "quotes_db": str(quotes_db),
+        "quotes_db_ok": quotes_db.parent.is_dir() or quotes_db.is_file(),
     }
 
 
@@ -105,6 +129,18 @@ def search_products(
     }
 
 
+@app.post("/api/calc")
+def calc_note_formulas(
+    body: CalcRequest,
+    _email: str = Depends(require_session),
+) -> dict:
+    """Run handwritten note formulas: CBM → density → Z → S."""
+    try:
+        return run_quote_calc(body)
+    except ValueError as exc:
+        raise HTTPException(status_code=400, detail=str(exc)) from exc
+
+
 @app.post("/api/price")
 async def price_file(
     file: UploadFile = File(...),
@@ -127,3 +163,73 @@ async def price_file(
         raise HTTPException(status_code=422, detail=f"Could not parse file: {exc}") from exc
 
     return result
+
+
+@app.get("/api/quotes")
+def quotes_list(
+    limit: int = Query(50, ge=1, le=200),
+    _email: str = Depends(require_session),
+) -> dict:
+    items = list_quotes(limit=limit)
+    return {"count": len(items), "items": items}
+
+
+@app.post("/api/quotes")
+def quotes_create(
+    body: QuoteCreate,
+    email: str = Depends(require_session),
+) -> dict:
+    if not body.lines and not body.priced_items:
+        raise HTTPException(status_code=400, detail="Provide lines or priced_items")
+    return create_quote(body, created_by=email)
+
+
+@app.get("/api/quotes/{quote_id}")
+def quotes_get(
+    quote_id: str,
+    _email: str = Depends(require_session),
+) -> dict:
+    quote = get_quote(quote_id)
+    if not quote:
+        raise HTTPException(status_code=404, detail="Quote not found")
+    return quote
+
+
+@app.patch("/api/quotes/{quote_id}")
+def quotes_patch(
+    quote_id: str,
+    body: QuotePatch,
+    _email: str = Depends(require_session),
+) -> dict:
+    try:
+        return update_quote(quote_id, body)
+    except KeyError:
+        raise HTTPException(status_code=404, detail="Quote not found") from None
+    except PermissionError as exc:
+        raise HTTPException(status_code=409, detail=str(exc)) from exc
+    except ValueError as exc:
+        raise HTTPException(status_code=400, detail=str(exc)) from exc
+
+
+@app.post("/api/quotes/{quote_id}/issue")
+def quotes_issue(
+    quote_id: str,
+    _email: str = Depends(require_session),
+) -> dict:
+    try:
+        return issue_quote(quote_id)
+    except KeyError:
+        raise HTTPException(status_code=404, detail="Quote not found") from None
+    except ValueError as exc:
+        raise HTTPException(status_code=400, detail=str(exc)) from exc
+
+
+@app.get("/api/quotes/{quote_id}/breakdown")
+def quotes_breakdown(
+    quote_id: str,
+    _email: str = Depends(require_session),
+) -> dict:
+    try:
+        return quote_breakdown(quote_id)
+    except KeyError:
+        raise HTTPException(status_code=404, detail="Quote not found") from None

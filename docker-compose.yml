@@ -9,9 +9,12 @@ services:
       - "8000"
     environment:
       CATALOG_PATH: /data/all_orders_merged.csv
+      QUOTES_DB_PATH: /var/lib/pricing/quotes.db
       AUTH_EMAIL: ${AUTH_EMAIL:-}
       AUTH_PASSWORD: ${AUTH_PASSWORD:-}
       AUTH_SECRET: ${AUTH_SECRET:-}
+    volumes:
+      - quotes_data:/var/lib/pricing
     restart: unless-stopped
     healthcheck:
       test:
@@ -44,3 +47,6 @@ services:
       timeout: 5s
       retries: 5
       start_period: 10s
+
+volumes:
+  quotes_data:

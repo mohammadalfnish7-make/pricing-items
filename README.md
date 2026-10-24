@@ -56,6 +56,16 @@ Open http://localhost:5173 (Vite proxies `/api` → backend).
 
 `POST /api/price` — multipart form field `file`.
 
+Quotations (cookie session required):
+
+- `GET /api/quotes` — list drafts/issued quotes (SQLite at `QUOTES_DB_PATH`)
+- `POST /api/quotes` — create from `priced_items` or `lines`
+- `GET /api/quotes/{id}` / `PATCH /api/quotes/{id}` — load / edit (issued quotes are locked)
+- `POST /api/quotes/{id}/issue` — validate declared values and freeze breakdown
+- `GET /api/quotes/{id}/breakdown` — customer-facing charge lines
+
+Logistics: CBM → density → `Z = density × container_m³ / freight` → `S = (Z + customs) × coefficient`.
+
 Example:
 
 ```bash
